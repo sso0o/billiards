@@ -28,3 +28,6 @@ Thumbs.db
 
 # Vite 캐시
 .vite/
+
+# 작업 문서 (스펙/플랜 초안)
+docs/superpowers/

@@ -6,7 +6,7 @@ const node = (name, attrs = {}) => { const el = document.createElementNS(NS, nam
 
 export function renderTable(container, state, trajectory) {
   const spec = getTableSpec(state.mode);
-  const svg = node('svg', { viewBox: `0 0 ${spec.width} ${spec.height}`, role: 'img', 'aria-label': '당구 경로 도해' });
+  const svg = node('svg', { viewBox: `0 0 ${spec.width} ${spec.height}`, role: 'img', 'aria-label': '당구 경로' });
   const defs = node('defs');
   const marker = node('marker', { id: 'path-arrow', viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 8, markerHeight: 8, orient: 'auto-start-reverse' });
   marker.append(node('path', { d: 'M 0 0 L 10 5 L 0 10 z', class: 'path-arrow' }));

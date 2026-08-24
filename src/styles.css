@@ -7,7 +7,7 @@ body { margin: 0; min-width: 320px; }
 .control-panel { background: #f4f7f5; color: #203029; border-radius: 16px; padding: 18px; }
 .model-notice { margin: 0; padding: 0 20px 16px; color: #aebbb4; }
 
-.table-region svg { width: 100%; max-height: calc(100vh - 100px); aspect-ratio: 2 / 1; overflow: visible; background: #4b2b1e; border: 18px solid #6e4329; border-radius: 18px; }
+.table-region svg { width: 100%; max-height: calc(100vh - 100px); aspect-ratio: 2 / 1; overflow: visible; background: #4b2b1e; border: 18px solid #6e4329; border-radius: 18px; touch-action: none; }
 .cloth { fill: #1b6334; }
 .ball { stroke: #29342f; stroke-width: 2; cursor: grab; }
 .ball--white { fill: #fff; } .ball--yellow { fill: #f0cc33; } .ball--red { fill: #d93b36; }

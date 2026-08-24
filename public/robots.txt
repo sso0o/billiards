@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sso0o.github.io/billiards/sitemap.xml

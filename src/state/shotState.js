@@ -17,7 +17,7 @@ const INITIAL_BALLS = {
 };
 
 export function createInitialState(mode = 'fourBall') {
-  return { mode, balls: structuredClone(INITIAL_BALLS[mode]), cueBallId: 'white', firstObjectBallId: 'yellow', thickness: 0.25, cutSide: 1, tipClockAngle: 0, tipLevel: 1 };
+  return { mode, balls: structuredClone(INITIAL_BALLS[mode]), cueBallId: 'white', firstObjectBallId: 'yellow', thickness: 0.25, cutSide: 1, tipClockAngle: 0, tipLevel: 1, viaCushion: null };
 }
 
 export function updateState(state, action) {
@@ -42,6 +42,13 @@ if (action.type === 'setCueBall') {
     const snapped = { x: snap(position.x, gridXs), y: snap(position.y, gridYs) };
     if (state.balls.some((ball) => ball.id !== action.ballId && circlesOverlap(snapped, ball.position, spec.ballDiameter))) return state;
     return { ...state, balls: state.balls.map((ball) => ball.id === action.ballId ? { ...ball, position: snapped } : ball) };
+  }
+  if (action.type === 'moveViaCushionMarker') {
+    const spec = getTableSpec(state.mode);
+    const clamped = clampBallPosition(action.position, spec);
+    const target = state.balls.find((ball) => ball.id !== state.cueBallId && circlesOverlap(clamped, ball.position, spec.ballDiameter));
+    if (target) return { ...state, viaCushion: null, firstObjectBallId: target.id };
+    return { ...state, viaCushion: { markerPosition: clamped } };
   }
   return state;
 }

@@ -13,3 +13,10 @@ it('renders thickness and actual tip controls outside the table', () => {
   expect(host.textContent).toContain('왼쪽 맞힘');
   expect(host.textContent).toContain('오른쪽 맞힘');
 });
+
+it('hides thickness controls while aiming via a cushion', () => {
+  const host = document.createElement('aside');
+  const state = { ...createInitialState('fourBall'), viaCushion: { markerPosition: { x: 1224, y: 32.75 } } };
+  renderControls(host, state, vi.fn());
+  expect(host.querySelector('[data-control="thickness"]')).toBeNull();
+});

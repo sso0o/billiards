@@ -13,8 +13,9 @@ body { margin: 0; min-width: 320px; }
 .ball { stroke: #29342f; stroke-width: 2; cursor: grab; }
 .ball--white { fill: #fff; } .ball--yellow { fill: #f0cc33; } .ball--red { fill: #d93b36; }
 .ball--blocked { stroke: #ff7b68; stroke-width: 8; }
-.aim-line { stroke: #a8c3b0; stroke-width: 4; stroke-dasharray: 10 12; }
-.ghost-ball { fill: none; stroke: #fff; stroke-width: 3; stroke-dasharray: 8 8; }
+.aim-line { fill: none; stroke: #a8c3b0; stroke-width: 4; stroke-dasharray: 10 12; }
+[data-ghost-marker] { cursor: grab; }
+.ghost-ball { fill: none; stroke: #fff; stroke-width: 3; stroke-dasharray: 8 8; pointer-events: all; }
 .cue-path { fill: none; stroke: #75e3ef; stroke-width: 6; }
 .object-path { fill: none; stroke: #559cff; stroke-width: 6; }
 .path-arrow { fill: #dffbff; }

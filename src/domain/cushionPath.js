@@ -1,14 +1,23 @@
 // src/domain/cushionPath.js
 import { dot, normalize, rotate } from './vector.js';
 
-export function nextCushionHit(origin, direction, spec) {
+export function railGeometry(rail, spec) {
   const r = spec.ballDiameter / 2;
-  const candidates = [
-    { t: (r - origin.x) / direction.x, normal: { x: 1, y: 0 } },
-    { t: (spec.width - r - origin.x) / direction.x, normal: { x: -1, y: 0 } },
-    { t: (r - origin.y) / direction.y, normal: { x: 0, y: 1 } },
-    { t: (spec.height - r - origin.y) / direction.y, normal: { x: 0, y: -1 } }
-  ].filter(({ t }) => Number.isFinite(t) && t > 1e-7).sort((a, b) => a.t - b.t);
+  const geometry = {
+    left: { axis: 'x', value: r, normal: { x: 1, y: 0 } },
+    right: { axis: 'x', value: spec.width - r, normal: { x: -1, y: 0 } },
+    top: { axis: 'y', value: r, normal: { x: 0, y: 1 } },
+    bottom: { axis: 'y', value: spec.height - r, normal: { x: 0, y: -1 } }
+  };
+  return geometry[rail];
+}
+
+export function nextCushionHit(origin, direction, spec) {
+  const candidates = ['left', 'right', 'top', 'bottom']
+      .map((rail) => railGeometry(rail, spec))
+      .map(({ axis, value, normal }) => ({ t: (value - origin[axis]) / direction[axis], normal }))
+      .filter(({ t }) => Number.isFinite(t) && t > 1e-7)
+      .sort((a, b) => a.t - b.t);
 
   if (!candidates.length) return null;
   const hit = candidates[0];
@@ -20,7 +29,7 @@ export function reflectFromCushion(direction, normal, sideSpin, tipLevel) {
     x: direction.x - 2 * dot(direction, normal) * normal.x,
     y: direction.y - 2 * dot(direction, normal) * normal.y
   };
-  const adjustment = sideSpin * (tipLevel / 3) * 12 * Math.PI / 180;
+  const adjustment = -sideSpin * (tipLevel / 3) * 12 * Math.PI / 180;
   return normalize(rotate(reflected, adjustment));
 }
 

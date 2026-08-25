@@ -1,10 +1,10 @@
 // tests/ui/tableView.test.js
 import { expect, it } from 'vitest';
 import { renderTable } from '../../src/ui/tableView.js';
-import { createInitialState } from '../../src/state/shotState.js';
+import { createInitialState, updateState } from '../../src/state/shotState.js';
 import { calculateTrajectory } from '../../src/domain/trajectory.js';
 
-it('renders a 2:1 playing surface and all rail sights', () => {
+it('renders a 2:1 playing surface, all rail sights, and a draggable ghost marker', () => {
   const host = document.createElement('div');
   const state = createInitialState('fourBall');
   renderTable(host, state, calculateTrajectory(state));
@@ -15,4 +15,16 @@ it('renders a 2:1 playing surface and all rail sights', () => {
   expect(host.querySelectorAll('[data-rail="right"]')).toHaveLength(3);
   expect(host.querySelector('[data-ball="white"]').getAttribute('r')).toBe('32.75');
   expect(host.querySelector('.cue-path').getAttribute('d')).toContain('Q');
+  expect(host.querySelector('[data-ghost-marker]')).not.toBeNull();
+});
+
+it('renders a dashed ghost marker and a full reflection path while aiming at an empty spot', () => {
+  const host = document.createElement('div');
+  const state = updateState(createInitialState('fourBall'), { type: 'moveViaCushionMarker', position: { x: 1224, y: 100 } });
+  renderTable(host, state, calculateTrajectory(state));
+  const marker = host.querySelector('[data-ghost-marker]');
+  expect(marker).not.toBeNull();
+  expect(marker.getAttribute('cx')).toBe('1224');
+  expect(host.querySelector('.aim-line').getAttribute('points').trim().split(' ').length).toBeGreaterThan(2);
+  expect(host.querySelector('.cue-path')).toBeNull();
 });

@@ -24,10 +24,11 @@ export function renderTable(container, state, trajectory) {
     svg.append(node('circle', { 'data-rail': 'right', cx: spec.width - 12, cy: y, r: 4 }));
   }
   for (const ball of state.balls) svg.append(node('circle', { 'data-ball': ball.id, class: `ball ball--${ball.color}`, cx: ball.position.x, cy: ball.position.y, r: spec.ballDiameter / 2 }));
-  if (trajectory.aimLine) svg.append(node('line', { class: 'aim-line', x1: trajectory.aimLine[0].x, y1: trajectory.aimLine[0].y, x2: trajectory.aimLine[1].x, y2: trajectory.aimLine[1].y }));
+  if (trajectory.aimLine) svg.append(node('polyline', { class: 'aim-line', points: trajectory.aimLine.map((p) => `${p.x},${p.y}`).join(' ') }));
   if (trajectory.blockedBallId) svg.querySelector(`[data-ball="${trajectory.blockedBallId}"]`).classList.add('ball--blocked');
-  if (!trajectory.error) {
-    svg.append(node('circle', { class: 'ghost-ball', cx: trajectory.ghostBall.center.x, cy: trajectory.ghostBall.center.y, r: trajectory.ghostBall.radius }));
+  const ghostMarker = trajectory.ghostBall ?? trajectory.viaCushionMarker;
+  if (ghostMarker) svg.append(node('circle', { class: 'ghost-ball', 'data-ghost-marker': '', cx: ghostMarker.center.x, cy: ghostMarker.center.y, r: ghostMarker.radius }));
+  if (trajectory.cuePath) {
     const [cueStart, cueFirst, ...cueRest] = trajectory.cuePath.points;
     const cueD = cueFirst ? `M ${cueStart.x} ${cueStart.y} Q ${trajectory.cuePath.control.x} ${trajectory.cuePath.control.y} ${cueFirst.x} ${cueFirst.y} ${cueRest.map((p) => `L ${p.x} ${p.y}`).join(' ')}` : `M ${cueStart.x} ${cueStart.y}`;
     svg.append(node('path', { class: 'cue-path', d: cueD, 'marker-end': 'url(#path-arrow)' }));

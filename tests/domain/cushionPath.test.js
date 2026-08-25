@@ -1,6 +1,6 @@
 // tests/domain/cushionPath.test.js
 import { expect, it } from 'vitest';
-import { nextCushionHit, reflectFromCushion, traceCushions } from '../../src/domain/cushionPath.js';
+import { nextCushionHit, railGeometry, reflectFromCushion, traceCushions } from '../../src/domain/cushionPath.js';
 
 const spec = { width: 2448, height: 1224, ballDiameter: 65.5, maxCushions: 3 };
 
@@ -18,11 +18,17 @@ it('limits the path to three cushion hits', () => {
   expect(traceCushions({ x: 1000, y: 600 }, { x: 0.8, y: 0.6 }, spec, { sideSpin: 0, tipLevel: 0 }).hits).toHaveLength(3);
 });
 
-
 it('changes reflection in opposite directions for left and right spin', () => {
   const incoming = { x: 0.8, y: -0.6 };
   const left = reflectFromCushion(incoming, { x: 0, y: 1 }, -1, 3);
   const right = reflectFromCushion(incoming, { x: 0, y: 1 }, 1, 3);
   expect(left.y).not.toBeCloseTo(right.y, 5);
   expect(left.x).not.toBeCloseTo(right.x, 5);
+});
+
+it('returns axis, fixed value, and normal for each rail', () => {
+  expect(railGeometry('left', spec)).toEqual({ axis: 'x', value: 32.75, normal: { x: 1, y: 0 } });
+  expect(railGeometry('right', spec)).toEqual({ axis: 'x', value: 2415.25, normal: { x: -1, y: 0 } });
+  expect(railGeometry('top', spec)).toEqual({ axis: 'y', value: 32.75, normal: { x: 0, y: 1 } });
+  expect(railGeometry('bottom', spec)).toEqual({ axis: 'y', value: 1191.25, normal: { x: 0, y: -1 } });
 });

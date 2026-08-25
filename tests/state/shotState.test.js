@@ -16,3 +16,23 @@ it('rejects an overlapping move', () => {
   expect(next.balls[0].position).toEqual(state.balls[0].position);
 });
 
+it('moves the ghost marker freely and leaves the first object ball unchanged when it is not near another ball', () => {
+  const state = createInitialState('fourBall');
+  const next = updateState(state, { type: 'moveViaCushionMarker', position: { x: 500, y: 700 } });
+  expect(next.viaCushion).toEqual({ markerPosition: { x: 500, y: 700 } });
+  expect(next.firstObjectBallId).toBe('yellow');
+});
+
+it('snaps the marker onto a nearby ball, sets it as the first object ball, and exits cushion-preview mode', () => {
+  const state = createInitialState('fourBall');
+  const next = updateState(state, { type: 'moveViaCushionMarker', position: { x: 1900, y: 400 } });
+  expect(next.firstObjectBallId).toBe('red-1');
+  expect(next.viaCushion).toBeNull();
+});
+
+it('never snaps onto the cue ball itself', () => {
+  const state = createInitialState('fourBall');
+  const next = updateState(state, { type: 'moveViaCushionMarker', position: { x: 620, y: 900 } });
+  expect(next.firstObjectBallId).toBe('yellow');
+  expect(next.viaCushion.markerPosition).toEqual({ x: 620, y: 900 });
+});

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { createApp } from '../../src/app.js';
 
 describe('createApp', () => {
-  it('renders the table and external control panel', () => {
+  it('테이블과 외부 컨트롤 패널을 렌더링한다', () => {
     document.body.innerHTML = '<main id="app"></main>';
     createApp(document.querySelector('#app'));
 

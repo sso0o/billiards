@@ -43,7 +43,7 @@ export function cueCurveControl(start, end, objectDirection, tipClockAngle, tipL
 // incomingOrigin -> contactPoint 방향으로 공에 닿은 뒤의 큐볼/목적구 경로. 직선 모드와 쿠션 우선(스냅) 모드가 공유한다.
 function buildContactPaths(incomingOrigin, contactPoint, object, cueId, state, spec) {
   const directions = collisionDirections(incomingOrigin, object.position, contactPoint);
-  const sideSpin = Math.sign(Math.sin(state.tipClockAngle * Math.PI / 180));
+  const sideSpin = Math.sin(state.tipClockAngle * Math.PI / 180);
   const verticalSpin = Math.cos(state.tipClockAngle * Math.PI / 180) * (state.tipLevel / 3);
   const tipSideAngle = sideSpin * (state.tipLevel / 3) * 12 * Math.PI / 180;
   let initialCueDirection = directions.cue;
@@ -86,7 +86,7 @@ function calculateViaCushionTrajectory(state, spec, cue, object) {
   if (incomingBlock.hitBallId) {
     return { error: '선택하지 않은 공이 먼저 맞습니다.', aimLine: incomingBlock.points, blockedBallId: incomingBlock.hitBallId, viaCushionMarker: { center: marker, radius } };
   }
-  const sideSpin = Math.sign(Math.sin(state.tipClockAngle * Math.PI / 180));
+  const sideSpin = Math.sin(state.tipClockAngle * Math.PI / 180);
   const trace = traceCushions(cue.position, direction, spec, { sideSpin, tipLevel: state.tipLevel });
   return { aimLine: [cue.position, ...trace.hits], viaCushionMarker: { center: marker, radius } };
 }

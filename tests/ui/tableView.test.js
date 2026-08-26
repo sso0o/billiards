@@ -4,7 +4,7 @@ import { renderTable } from '../../src/ui/tableView.js';
 import { createInitialState, updateState } from '../../src/state/shotState.js';
 import { calculateTrajectory } from '../../src/domain/trajectory.js';
 
-it('renders a 2:1 playing surface, all rail sights, and a draggable ghost marker', () => {
+it('2:1 경기 면, 모든 쿠션 포인트, 드래그 가능한 고스트 마커를 렌더링한다', () => {
   const host = document.createElement('div');
   const state = createInitialState('fourBall');
   renderTable(host, state, calculateTrajectory(state));
@@ -18,7 +18,7 @@ it('renders a 2:1 playing surface, all rail sights, and a draggable ghost marker
   expect(host.querySelector('[data-ghost-marker]')).not.toBeNull();
 });
 
-it('renders a dashed ghost marker and a full reflection path while aiming at an empty spot', () => {
+it('빈 공간 조준 시 점선 고스트 마커와 전체 반사 경로를 렌더링한다', () => {
   const host = document.createElement('div');
   const state = updateState(createInitialState('fourBall'), { type: 'moveViaCushionMarker', position: { x: 1224, y: 100 } });
   renderTable(host, state, calculateTrajectory(state));

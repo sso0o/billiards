@@ -2,12 +2,18 @@
 import { expect, it, vi } from 'vitest';
 import { bindBallDragging } from '../../src/ui/dragController.js';
 
+if (typeof DOMPoint === 'undefined') {
+    globalThis.DOMPoint = class DOMPoint {
+        constructor(x = 0, y = 0) { this.x = x; this.y = y; }
+    };
+}
+
 function stubSvgGeometry(svg) {
     svg.getScreenCTM = () => ({ inverse: () => ({}) });
     DOMPoint.prototype.matrixTransform = function () { return { x: this.x, y: this.y }; };
 }
 
-it('dispatches moveViaCushionMarker while dragging the ghost marker', () => {
+it('고스트 마커 드래그 시 moveViaCushionMarker를 디스패치한다', () => {
     const container = document.createElement('div');
     container.innerHTML = '<svg><circle data-ghost-marker cx="10" cy="10" r="4"></circle></svg>';
     stubSvgGeometry(container.querySelector('svg'));
@@ -22,7 +28,7 @@ it('dispatches moveViaCushionMarker while dragging the ghost marker', () => {
     expect(dispatch).toHaveBeenCalledWith({ type: 'moveViaCushionMarker', position: { x: 42, y: 24 } });
 });
 
-it('dispatches moveBall (not moveViaCushionMarker) while dragging a plain ball', () => {
+it('일반 공 드래그 시 moveBall을 디스패치한다', () => {
     const container = document.createElement('div');
     container.innerHTML = '<svg><circle data-ball="white" cx="10" cy="10" r="4"></circle></svg>';
     stubSvgGeometry(container.querySelector('svg'));

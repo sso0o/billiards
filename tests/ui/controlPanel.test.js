@@ -37,3 +37,11 @@ it('showObjectPath가 false면 체크박스가 해제된 상태로 렌더링된�
   renderControls(host, state, vi.fn());
   expect(host.querySelector('[data-control="show-object-path"]').checked).toBe(false);
 });
+
+it('공 랜덤 배치 버튼 클릭 시 dispatch한다', () => {
+  const host = document.createElement('aside');
+  const dispatch = vi.fn();
+  renderControls(host, createInitialState('fourBall'), dispatch);
+  host.querySelector('[data-action="randomize-balls"]').click();
+  expect(dispatch).toHaveBeenCalledWith({ type: 'randomizeBalls' });
+});

@@ -64,3 +64,13 @@ test('toggles the object ball path visibility', async ({ page }) => {
   await toggle.check();
   await expect(page.locator('.object-path')).toBeVisible();
 });
+
+test('randomizes ball positions on button click', async ({ page }) => {
+  await page.goto('/');
+  const ball = page.locator('[data-ball="red-1"]');
+  const before = await ball.boundingBox();
+  await page.locator('[data-action="randomize-balls"]').click();
+  const after = await ball.boundingBox();
+  expect(after.x === before.x && after.y === before.y).toBe(false);
+  await expect(page.locator('[data-testid="table-region"] svg')).toHaveAttribute('viewBox', '0 0 2448 1224');
+});

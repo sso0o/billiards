@@ -1,6 +1,8 @@
 // tests/state/shotState.test.js
 import { expect, it } from 'vitest';
 import { createInitialState, updateState } from '../../src/state/shotState.js';
+import { circlesOverlap } from '../../src/domain/ballPlacement.js';
+import { getTableSpec } from '../../src/domain/tableSpecs.js';
 
 it('모드를 변경하고 해당 모드의 기본값으로 초기화한다', () => {
   const state = createInitialState('fourBall');
@@ -51,4 +53,25 @@ it('모드를 변경하면 목적구 이동경로 표시 여부가 기본값으�
   expect(state.showObjectPath).toBe(false);
   const next = updateState(state, { type: 'setMode', mode: 'threeCushion' });
   expect(next.showObjectPath).toBe(true);
+});
+
+it('공 랜덤 배치 액션은 겹치지 않게 재배치하고 id/color/role과 쿠션 마커를 정리한다', () => {
+  const state = { ...createInitialState('fourBall'), viaCushion: { markerPosition: { x: 100, y: 100 } } };
+  const next = updateState(state, { type: 'randomizeBalls' });
+  const spec = getTableSpec('fourBall');
+  expect(next.viaCushion).toBeNull();
+  expect(next.balls.map((b) => b.id)).toEqual(state.balls.map((b) => b.id));
+  expect(next.balls.map((b) => b.color)).toEqual(state.balls.map((b) => b.color));
+  expect(next.balls.map((b) => b.role)).toEqual(state.balls.map((b) => b.role));
+  next.balls.forEach((ball) => {
+    expect(ball.position.x).toBeGreaterThanOrEqual(spec.ballDiameter / 2);
+    expect(ball.position.x).toBeLessThanOrEqual(spec.width - spec.ballDiameter / 2);
+    expect(ball.position.y).toBeGreaterThanOrEqual(spec.ballDiameter / 2);
+    expect(ball.position.y).toBeLessThanOrEqual(spec.height - spec.ballDiameter / 2);
+  });
+  for (let i = 0; i < next.balls.length; i += 1) {
+    for (let j = i + 1; j < next.balls.length; j += 1) {
+      expect(circlesOverlap(next.balls[i].position, next.balls[j].position, spec.ballDiameter)).toBe(false);
+    }
+  }
 });

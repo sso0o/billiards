@@ -1,5 +1,5 @@
 // src/state/shotState.js
-import { circlesOverlap, clampBallPosition } from '../domain/ballPlacement.js';
+import { circlesOverlap, clampBallPosition, randomizeBallPositions } from '../domain/ballPlacement.js';
 import { getTableSpec } from '../domain/tableSpecs.js';
 
 const INITIAL_BALLS = {
@@ -34,6 +34,7 @@ if (action.type === 'setCueBall') {
   if (action.type === 'setCutSide') return { ...state, cutSide: action.value };
   if (action.type === 'setTip') return { ...state, tipClockAngle: action.clockAngle, tipLevel: action.level };
   if (action.type === 'toggleObjectPath') return { ...state, showObjectPath: !state.showObjectPath };
+  if (action.type === 'randomizeBalls') return { ...state, balls: randomizeBallPositions(state.balls, getTableSpec(state.mode)), viaCushion: null };
   if (action.type === 'moveBall') {
     const spec = getTableSpec(state.mode);
     const position = clampBallPosition(action.position, spec);

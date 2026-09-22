@@ -36,3 +36,19 @@ it('큐볼 자체에는 스냅하지 않는다', () => {
   expect(next.firstObjectBallId).toBe('yellow');
   expect(next.viaCushion.markerPosition).toEqual({ x: 620, y: 900 });
 });
+
+it('기본적으로 목적구 이동경로를 표시하고, 토글하면 전환된다', () => {
+  const state = createInitialState('fourBall');
+  expect(state.showObjectPath).toBe(true);
+  const next = updateState(state, { type: 'toggleObjectPath' });
+  expect(next.showObjectPath).toBe(false);
+  const next2 = updateState(next, { type: 'toggleObjectPath' });
+  expect(next2.showObjectPath).toBe(true);
+});
+
+it('모드를 변경하면 목적구 이동경로 표시 여부가 기본값으로 초기화된다', () => {
+  const state = updateState(createInitialState('fourBall'), { type: 'toggleObjectPath' });
+  expect(state.showObjectPath).toBe(false);
+  const next = updateState(state, { type: 'setMode', mode: 'threeCushion' });
+  expect(next.showObjectPath).toBe(true);
+});

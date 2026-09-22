@@ -20,3 +20,20 @@ it('쿠션 조준 중에는 두께 컨트롤을 숨긴다', () => {
   renderControls(host, state, vi.fn());
   expect(host.querySelector('[data-control="thickness"]')).toBeNull();
 });
+
+it('목적구 이동경로 토글 체크박스를 렌더링하고 클릭 시 dispatch한다', () => {
+  const host = document.createElement('aside');
+  const dispatch = vi.fn();
+  renderControls(host, createInitialState('fourBall'), dispatch);
+  const checkbox = host.querySelector('[data-control="show-object-path"]');
+  expect(checkbox.checked).toBe(true);
+  checkbox.dispatchEvent(new Event('change'));
+  expect(dispatch).toHaveBeenCalledWith({ type: 'toggleObjectPath' });
+});
+
+it('showObjectPath가 false면 체크박스가 해제된 상태로 렌더링된다', () => {
+  const host = document.createElement('aside');
+  const state = { ...createInitialState('fourBall'), showObjectPath: false };
+  renderControls(host, state, vi.fn());
+  expect(host.querySelector('[data-control="show-object-path"]').checked).toBe(false);
+});

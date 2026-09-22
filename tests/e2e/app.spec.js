@@ -49,3 +49,18 @@ test('drags the ghost ball to preview a cushion bounce, then snaps it onto a bal
   await expect(page.locator('.object-path')).toBeVisible();
   expect(await page.locator('[data-control="thickness"]').count()).toBe(1);
 });
+
+test('toggles the object ball path visibility', async ({ page }) => {
+  await page.goto('/');
+  const toggle = page.locator('[data-control="show-object-path"]');
+  await expect(toggle).toBeChecked();
+  await expect(page.locator('.object-path')).toBeVisible();
+  await expect(page.locator('.cue-path')).toBeVisible();
+
+  await toggle.uncheck();
+  await expect(page.locator('.object-path')).toHaveCount(0);
+  await expect(page.locator('.cue-path')).toBeVisible();
+
+  await toggle.check();
+  await expect(page.locator('.object-path')).toBeVisible();
+});

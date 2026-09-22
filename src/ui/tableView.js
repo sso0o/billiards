@@ -32,9 +32,11 @@ export function renderTable(container, state, trajectory) {
     const [cueStart, cueFirst, ...cueRest] = trajectory.cuePath.points;
     const cueD = cueFirst ? `M ${cueStart.x} ${cueStart.y} Q ${trajectory.cuePath.control.x} ${trajectory.cuePath.control.y} ${cueFirst.x} ${cueFirst.y} ${cueRest.map((p) => `L ${p.x} ${p.y}`).join(' ')}` : `M ${cueStart.x} ${cueStart.y}`;
     svg.append(node('path', { class: 'cue-path', d: cueD, 'marker-end': 'url(#path-arrow)' }));
-    svg.append(node('polyline', { class: 'object-path', points: trajectory.objectPath.map((p) => `${p.x},${p.y}`).join(' '), 'marker-end': 'url(#path-arrow)' }));
     trajectory.cuePath.points.slice(1).forEach((point) => svg.append(node('circle', { class: 'cushion-hit cushion-hit--cue', cx: point.x, cy: point.y, r: 8 })));
-    trajectory.objectPath.slice(1).forEach((point) => svg.append(node('circle', { class: 'cushion-hit cushion-hit--object', cx: point.x, cy: point.y, r: 8 })));
+    if (state.showObjectPath) {
+      svg.append(node('polyline', { class: 'object-path', points: trajectory.objectPath.map((p) => `${p.x},${p.y}`).join(' '), 'marker-end': 'url(#path-arrow)' }));
+      trajectory.objectPath.slice(1).forEach((point) => svg.append(node('circle', { class: 'cushion-hit cushion-hit--object', cx: point.x, cy: point.y, r: 8 })));
+    }
   }
   container.replaceChildren(svg);
   return svg;

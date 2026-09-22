@@ -28,3 +28,19 @@ it('빈 공간 조준 시 점선 고스트 마커와 전체 반사 경로를 렌
   expect(host.querySelector('.aim-line').getAttribute('points').trim().split(' ').length).toBeGreaterThan(2);
   expect(host.querySelector('.cue-path')).toBeNull();
 });
+
+it('showObjectPath가 false면 목적구 경로와 목적구 쿠션 점을 숨기고 큐볼 경로는 유지한다', () => {
+  const host = document.createElement('div');
+  const state = { ...createInitialState('fourBall'), showObjectPath: false };
+  renderTable(host, state, calculateTrajectory(state));
+  expect(host.querySelector('.cue-path')).not.toBeNull();
+  expect(host.querySelector('.object-path')).toBeNull();
+  expect(host.querySelectorAll('.cushion-hit--object')).toHaveLength(0);
+});
+
+it('showObjectPath가 true(기본값)면 목적구 경로를 렌더링한다', () => {
+  const host = document.createElement('div');
+  const state = createInitialState('fourBall');
+  renderTable(host, state, calculateTrajectory(state));
+  expect(host.querySelector('.object-path')).not.toBeNull();
+});

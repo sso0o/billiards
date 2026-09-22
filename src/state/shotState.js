@@ -17,7 +17,7 @@ const INITIAL_BALLS = {
 };
 
 export function createInitialState(mode = 'fourBall') {
-  return { mode, balls: structuredClone(INITIAL_BALLS[mode]), cueBallId: 'white', firstObjectBallId: 'yellow', thickness: 0.25, cutSide: 1, tipClockAngle: 0, tipLevel: 1, viaCushion: null };
+  return { mode, balls: structuredClone(INITIAL_BALLS[mode]), cueBallId: 'white', firstObjectBallId: 'yellow', thickness: 0.25, cutSide: 1, tipClockAngle: 0, tipLevel: 1, viaCushion: null, showObjectPath: true };
 }
 
 export function updateState(state, action) {
@@ -33,6 +33,7 @@ if (action.type === 'setCueBall') {
   if (action.type === 'setThickness') return { ...state, thickness: Math.min(1, Math.max(0, action.value)) };
   if (action.type === 'setCutSide') return { ...state, cutSide: action.value };
   if (action.type === 'setTip') return { ...state, tipClockAngle: action.clockAngle, tipLevel: action.level };
+  if (action.type === 'toggleObjectPath') return { ...state, showObjectPath: !state.showObjectPath };
   if (action.type === 'moveBall') {
     const spec = getTableSpec(state.mode);
     const position = clampBallPosition(action.position, spec);

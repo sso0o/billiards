@@ -28,6 +28,7 @@ it('직접 경로가 막혀도 고스트 마커를 드래그할 수 있다', () 
   const state = {
     ...createInitialState('fourBall'),
     thickness: 1,
+    firstObjectBallId: 'yellow',
     balls: [
       { id: 'white', role: 'cue', color: 'white', position: { x: 1000, y: 1000 } },
       { id: 'yellow', role: 'object', color: 'yellow', position: { x: 1000, y: 200 } },

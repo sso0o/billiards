@@ -45,3 +45,12 @@ it('공 랜덤 배치 버튼 클릭 시 dispatch한다', () => {
   host.querySelector('[data-action="randomize-balls"]').click();
   expect(dispatch).toHaveBeenCalledWith({ type: 'randomizeBalls' });
 });
+
+it('당점 정중앙 버튼 클릭 시 dispatch한다', () => {
+  const host = document.createElement('aside');
+  const dispatch = vi.fn();
+  const state = { ...createInitialState('fourBall'), tipClockAngle: 90, tipLevel: 2 };
+  renderControls(host, state, dispatch);
+  host.querySelector('[data-action="center-tip"]').click();
+  expect(dispatch).toHaveBeenCalledWith({ type: 'setTip', clockAngle: 0, level: 0 });
+});

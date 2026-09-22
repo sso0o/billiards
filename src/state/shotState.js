@@ -5,7 +5,7 @@ import { getTableSpec } from '../domain/tableSpecs.js';
 const INITIAL_BALLS = {
   fourBall: [
     { id: 'white', role: 'cue', color: 'white', position: { x: 620, y: 900 } },
-    { id: 'yellow', role: 'object', color: 'yellow', position: { x: 1230, y: 590 } },
+    { id: 'yellow', role: 'object', color: 'yellow', position: { x: 1230, y: 1000 } },
     { id: 'red-1', role: 'object', color: 'red', position: { x: 1900, y: 350 } },
     { id: 'red-2', role: 'object', color: 'red', position: { x: 1980, y: 980 } },
   ],
@@ -17,7 +17,8 @@ const INITIAL_BALLS = {
 };
 
 export function createInitialState(mode = 'fourBall') {
-  return { mode, balls: structuredClone(INITIAL_BALLS[mode]), cueBallId: 'white', firstObjectBallId: 'yellow', thickness: 0.25, cutSide: 1, tipClockAngle: 0, tipLevel: 1, viaCushion: null, showObjectPath: true };
+  const firstObjectBallId = INITIAL_BALLS[mode].find((ball) => ball.color === 'red').id;
+  return { mode, balls: structuredClone(INITIAL_BALLS[mode]), cueBallId: 'white', firstObjectBallId, thickness: 0.5, cutSide: 1, tipClockAngle: 0, tipLevel: 0, viaCushion: null, showObjectPath: true };
 }
 
 export function updateState(state, action) {
